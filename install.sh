@@ -2,14 +2,13 @@
 
 # cd into GPT-SoVITS Base Path
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-
 cd "$SCRIPT_DIR" || exit 1
 
 RESET="\033[0m"
 BOLD="\033[1m"
 ERROR="\033[1;31m[ERROR]: $RESET"
 WARNING="\033[1;33m[WARNING]: $RESET"
-INFO="\033[1;32m[INFO]: $RESET"
+INFO="\033ursor[1;32m[INFO]: $RESET"
 SUCCESS="\033[1;34m[SUCCESS]: $RESET"
 
 set -eE
@@ -22,7 +21,6 @@ on_error() {
     local lineno="$1"
     local cmd="$2"
     local code="$3"
-
     echo -e "${ERROR}${BOLD}Command \"${cmd}\" Failed${RESET} at ${BOLD}Line ${lineno}${RESET} with Exit Code ${BOLD}${code}${RESET}"
     echo -e "${ERROR}${BOLD}Call Stack:${RESET}"
     for ((i = ${#FUNCNAME[@]} - 1; i >= 1; i--)); do
@@ -34,7 +32,7 @@ on_error() {
 run_conda_quiet() {
     local output
     output=$(conda install --yes --quiet -c conda-forge "$@" 2>&1) || {
-        echo -e "${ERROR} Conda install failed:\n$output"
+        echo -e "${ERROR}Conda install failed:\n$output"
         exit 1
     }
 }
@@ -42,17 +40,25 @@ run_conda_quiet() {
 run_pip_quiet() {
     local output
     output=$(pip install "$@" 2>&1) || {
-        echo -e "${ERROR} Pip install failed:\n$output"
+        echo -e "${ERROR}Pip install failed:\n$output"
         exit 1
     }
 }
 
 run_wget_quiet() {
-    if wget --tries=25 --wait=5 --read-timeout=40 -q --show-progress "$@" 2>&1; then
-        tput cuu1 && tput el
+    # Check if running in interactive terminal; skip tput if not
+    if [ -t 1 ]; then
+        if wget --tries=25 --wait=5 --read-timeout=40 -q --show-progress "$@" 2>&1; then
+            tput cuu1 && tput el
+        else
+            echo -e "${ERROR}Wget failed"
+            exit 1
+        fi
     else
-        echo -e "${ERROR} Wget failed"
-        exit 1
+        wget --tries=25 --wait=5 --read-timeout=40 -q "$@" || {
+            echo -e "${ERROR}Wget failed"
+            exit 1
+        }
     fi
 }
 
@@ -106,7 +112,7 @@ while [[ $# -gt 0 ]]; do
             USE_MODELSCOPE=true
             ;;
         *)
-            echo -e "${ERROR}Error: Invalid Download Source: $2"
+            echo -e "${ERROR}Invalid Download Source: $2"
             echo -e "${ERROR}Choose From: [HF, HF-Mirror, ModelScope]"
             exit 1
             ;;
@@ -133,7 +139,7 @@ while [[ $# -gt 0 ]]; do
             USE_CPU=true
             ;;
         *)
-            echo -e "${ERROR}Error: Invalid Device: $2"
+            echo -e "${ERROR}Invalid Device: $2"
             echo -e "${ERROR}Choose From: [CU126, CU128, ROCM, MPS, CPU]"
             exit 1
             ;;
@@ -158,14 +164,14 @@ while [[ $# -gt 0 ]]; do
 done
 
 if ! $USE_CUDA && ! $USE_ROCM && ! $USE_CPU; then
-    echo -e "${ERROR}Error: Device is REQUIRED"
+    echo -e "${ERROR}Device is REQUIRED"
     echo ""
     print_help
     exit 1
 fi
 
 if ! $USE_HF && ! $USE_HF_MIRROR && ! $USE_MODELSCOPE; then
-    echo -e "${ERROR}Error: Download Source is REQUIRED"
+    echo -e "${ERROR}Download Source is REQUIRED"
     echo ""
     print_help
     exit 1
@@ -204,7 +210,6 @@ else
         echo -e "${INFO}Waiting For Xcode Command Line Tools Installation Complete..."
         while true; do
             sleep 20
-
             if xcode-select -p &>/dev/null; then
                 echo -e "${SUCCESS}Xcode Command Line Tools Installed"
                 break
@@ -215,8 +220,8 @@ else
     else
         XCODE_PATH=$(xcode-select -p)
         if [[ "$XCODE_PATH" == *"Xcode.app"* ]]; then
-            echo -e "${WARNING} Detected Xcode path: $XCODE_PATH"
-            echo -e "${WARNING} If your Xcode version does not match your macOS version, it may cause unexpected issues during compilation or package builds."
+            echo -e "${WARNING}Detected Xcode path: $XCODE_PATH"
+            echo -e "${WARNING}If your Xcode version does not match your macOS version, it may cause unexpected issues during compilation or package builds."
         fi
     fi
 fi
@@ -256,7 +261,6 @@ if [ ! -d "GPT_SoVITS/pretrained_models/sv" ]; then
     echo -e "${INFO}Downloading Pretrained Models..."
     rm -rf pretrained_models.zip
     run_wget_quiet "$PRETRINED_URL"
-
     unzip -q -o pretrained_models.zip -d GPT_SoVITS
     rm -rf pretrained_models.zip
     echo -e "${SUCCESS}Pretrained Models Downloaded"
@@ -266,10 +270,9 @@ else
 fi
 
 if [ ! -d "GPT_SoVITS/text/G2PWModel" ]; then
-    echo -e "${INFO}Downloading G2PWModel.."
+    echo -e "${INFO}Downloading G2PWModel..."
     rm -rf G2PWModel.zip
     run_wget_quiet "$G2PW_URL"
-
     unzip -q -o G2PWModel.zip -d GPT_SoVITS/text
     rm -rf G2PWModel.zip
     echo -e "${SUCCESS}G2PWModel Downloaded"
@@ -280,13 +283,12 @@ fi
 
 if [ "$DOWNLOAD_UVR5" = "true" ]; then
     if find -L "tools/uvr5/uvr5_weights" -mindepth 1 ! -name '.gitignore' | grep -q .; then
-        echo -e"${INFO}UVR5 Models Exists"
+        echo -e "${INFO}UVR5 Models Exists"
         echo -e "${INFO}Skip Downloading UVR5 Models"
     else
         echo -e "${INFO}Downloading UVR5 Models..."
         rm -rf uvr5_weights.zip
         run_wget_quiet "$UVR5_URL"
-
         unzip -q -o uvr5_weights.zip -d tools/uvr5
         rm -rf uvr5_weights.zip
         echo -e "${SUCCESS}UVR5 Models Downloaded"
@@ -296,7 +298,7 @@ fi
 if [ "$USE_CUDA" = true ] && [ "$WORKFLOW" = false ]; then
     echo -e "${INFO}Checking For Nvidia Driver Installation..."
     if command -v nvidia-smi &>/dev/null; then
-        echo "${INFO}Nvidia Driver Founded"
+        echo -e "${INFO}Nvidia Driver Found"
     else
         echo -e "${WARNING}Nvidia Driver Not Found, Fallback to CPU"
         USE_CUDA=false
@@ -307,9 +309,9 @@ fi
 if [ "$USE_ROCM" = true ] && [ "$WORKFLOW" = false ]; then
     echo -e "${INFO}Checking For ROCm Installation..."
     if [ -d "/opt/rocm" ]; then
-        echo -e "${INFO}ROCm Founded"
+        echo -e "${INFO}ROCm Found"
         if grep -qi "microsoft" /proc/version; then
-            echo -e "${INFO}WSL2 Founded"
+            echo -e "${INFO}WSL2 Found"
             IS_WSL=true
         else
             IS_WSL=false
@@ -336,19 +338,15 @@ elif [ "$USE_CPU" = true ] && [ "$WORKFLOW" = false ]; then
     echo -e "${INFO}Installing PyTorch For CPU..."
     run_pip_quiet torch torchaudio --index-url "https://download.pytorch.org/whl/cpu"
 elif [ "$WORKFLOW" = false ]; then
-    echo -e "${ERROR}Unknown Err"
+    echo -e "${ERROR}Unknown Error"
     exit 1
 fi
 echo -e "${SUCCESS}PyTorch Installed"
 
 echo -e "${INFO}Installing Python Dependencies From requirements.txt..."
-
 hash -r
-
 run_pip_quiet -r extra-req.txt --no-deps
-
 run_pip_quiet -r requirements.txt
-
 echo -e "${SUCCESS}Python Dependencies Installed"
 
 PY_PREFIX=$(python -c "import sys; print(sys.prefix)")
@@ -357,7 +355,7 @@ PYOPENJTALK_PREFIX=$(python -c "import os, pyopenjtalk; print(os.path.dirname(py
 echo -e "${INFO}Downloading NLTK Data..."
 rm -rf nltk_data.zip
 run_wget_quiet "$NLTK_URL" -O nltk_data.zip
-unzip -q -o nltk_data -d "$PY_PREFIX"
+unzip -q -o nltk_data.zip -d "$PY_PREFIX"
 rm -rf nltk_data.zip
 echo -e "${SUCCESS}NLTK Data Downloaded"
 
@@ -366,7 +364,7 @@ rm -rf open_jtalk_dic_utf_8-1.11.tar.gz
 run_wget_quiet "$PYOPENJTALK_URL" -O open_jtalk_dic_utf_8-1.11.tar.gz
 tar -xzf open_jtalk_dic_utf_8-1.11.tar.gz -C "$PYOPENJTALK_PREFIX"
 rm -rf open_jtalk_dic_utf_8-1.11.tar.gz
-echo -e "${SUCCESS}Open JTalk Dic Downloaded"
+echo -e "${SUCCESS}Open JTalk Dict Downloaded"
 
 if [ "$USE_ROCM" = true ] && [ "$IS_WSL" = true ]; then
     echo -e "${INFO}Updating WSL Compatible Runtime Lib For ROCm..."
