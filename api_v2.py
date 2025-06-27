@@ -670,12 +670,12 @@ async def tts_post_endpoint(request: TTS_Request):
     req = request.dict()
     return await tts_handle(req)
 
-if __name__ == "__main__":
-    try:
-        if host == 'None':
-            host = None
-        uvicorn.run(app=APP, host=host, port=port, workers=1)
-    except Exception as e:
-        traceback.print_exc()
-        os.kill(os.getpid(), signal.SIGTERM)
-        exit(0)
+# if __name__ == "__main__":
+#     try:
+#         if host == 'None':
+#             host = None
+#         uvicorn.run(app=APP, host=host, port=port, workers=1)
+#     except Exception as e:
+#         traceback.print_exc()
+#         os.kill(os.getpid(), signal.SIGTERM)
+#         exit(0)
