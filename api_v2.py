@@ -10,6 +10,7 @@ from fastapi.responses import StreamingResponse, JSONResponse
 from io import BytesIO
 import wave
 import subprocess
+import uvicorn
 import signal
 from tools.i18n.i18n import I18nAuto
 from GPT_SoVITS.TTS_infer_pack.TTS import TTS, TTS_Config, NO_PROMPT_ERROR
