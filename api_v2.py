@@ -93,8 +93,8 @@ is_exist_s2gv3 = os.path.exists(path_sovits_v3)
 is_exist_s2gv4 = os.path.exists(path_sovits_v4)
 
 # Logger setup
-import logging as std_logging
-import logging
+import importlib
+std_logging = importlib.import_module('logging')
 std_logging.config.dictConfig(uvicorn.config.LOGGING_CONFIG)
 logger = logging.getLogger('uvicorn')
 
