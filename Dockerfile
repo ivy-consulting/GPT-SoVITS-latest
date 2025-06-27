@@ -10,7 +10,7 @@ LABEL description="Docker image for GPT-SoVITS with FastAPI"
 ARG CUDA_VERSION=12.6
 ENV CUDA_VERSION=${CUDA_VERSION}
 ENV PYTHONUNBUFFERED=1
-ENV PYTHONPATH="/workspace/GPT-SoVITS"
+ENV PYTHONPATH="/workspace/GPT-SoVITS-latest"
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 ENV PIP_NO_CACHE_DIR=1
@@ -32,7 +32,7 @@ ENV TARGETPLATFORM=${TARGETPLATFORM}
 
 RUN bash Docker/miniconda_install.sh
 
-COPY extra-req.txt requirements.txt install.sh install_wrapper.sh /workspace/GPT-SoVITS/
+COPY extra-req.txt requirements.txt install.sh install_wrapper.sh /workspace/GPT-SoVITS-latest/
 
 RUN . /home/ec2-user/miniconda3/etc/profile.d/conda.sh && \
     conda create -n GPTSoVITS python=3.9 -y && \
