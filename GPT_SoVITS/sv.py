@@ -4,8 +4,8 @@ import torch
 
 sys.path.append('/workspace/GPT-SoVITS/GPT_SoVITS')
 sv_path = "GPT_SoVITS/pretrained_models/sv/pretrained_eres2netv2w24s4ep4.ckpt"
-from ERes2NetV2 import ERes2NetV2
-import kaldi as Kaldi
+from eres2net.ERes2NetV2 import ERes2NetV2
+import eres2net.kaldi as Kaldi
 
 
 class SV:
