@@ -540,7 +540,7 @@ class TTS:
             )
             self.vocoder.remove_weight_norm()
             state_dict_g = torch.load(
-                "%s/GPT_SoVITS/pretrained_models/gsv-v4-pretrained/vocoder.pth" % (now_dir,),
+                "%s/GPT-SoVITS/GPT_SoVITS/pretrained_models/gsv-v4-pretrained/vocoder.pth" % (now_dir,),
                 map_location="cpu",
                 weights_only=False,
             )

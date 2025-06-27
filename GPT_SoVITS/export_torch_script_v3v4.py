@@ -1124,10 +1124,10 @@ import time
 
 def export_2(version="v3"):
     if version == "v3":
-        sovits = get_sovits_weights("GPT_SoVITS/pretrained_models/s2Gv3.pth")
+        sovits = get_sovits_weights("GPT-SoVITS/GPT_SoVITS/pretrained_models/s2Gv3.pth")
         # init_bigvgan()
     else:
-        sovits = get_sovits_weights("GPT_SoVITS/pretrained_models/gsv-v4-pretrained/s2Gv4.pth")
+        sovits = get_sovits_weights("GPT-SoVITS/GPT_SoVITS/pretrained_models/gsv-v4-pretrained/s2Gv4.pth")
         # init_hifigan()
 
     # cfm = ExportCFM(sovits.cfm)
