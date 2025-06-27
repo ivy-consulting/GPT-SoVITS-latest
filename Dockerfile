@@ -1,4 +1,3 @@
-
 ARG CUDA_VERSION=12.6
 ARG TORCH_BASE=full
 
@@ -59,6 +58,8 @@ RUN echo '#!/bin/bash' > install_wrapper.sh && \
     echo 'pip install --upgrade pip' >> install_wrapper.sh && \
     echo 'pip install ipykernel uvicorn fastapi' >> install_wrapper.sh && \
     echo 'mkdir -p GPT_SoVITS/text' >> install_wrapper.sh && \
+    echo 'mkdir -p tools/asr' >> install_wrapper.sh && \
+    echo 'mkdir -p tools/uvr5' >> install_wrapper.sh && \
     echo 'ln -sf /workspace/models/pretrained_models /workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models' >> install_wrapper.sh && \
     echo 'ln -sf /workspace/models/G2PWModel /workspace/GPT-SoVITS/GPT_SoVITS/text/G2PWModel' >> install_wrapper.sh && \
     echo 'ln -sf /workspace/models/asr_models /workspace/GPT-SoVITS/tools/asr/models' >> install_wrapper.sh && \
