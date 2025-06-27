@@ -10,36 +10,36 @@ i18n = I18nAuto(language=os.environ.get("language", "Auto"))
 
 
 pretrained_sovits_name = {
-    "v1": "GPT_SoVITS/pretrained_models/s2G488k.pth",
-    "v2": "GPT_SoVITS/pretrained_models/gsv-v2final-pretrained/s2G2333k.pth",
-    "v3": "GPT_SoVITS/pretrained_models/s2Gv3.pth",  ###v3v4还要检查vocoder，算了。。。
-    "v4": "GPT_SoVITS/pretrained_models/gsv-v4-pretrained/s2Gv4.pth",
-    "v2Pro": "GPT_SoVITS/pretrained_models/v2Pro/s2Gv2Pro.pth",
-    "v2ProPlus": "GPT_SoVITS/pretrained_models/v2Pro/s2Gv2ProPlus.pth",
+    "v1": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/s2G488k.pth",
+    "v2": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/gsv-v2final-pretrained/s2G2333k.pth",
+    "v3": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/s2Gv3.pth",  ###v3v4还要检查vocoder，算了。。。
+    "v4": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/gsv-v4-pretrained/s2Gv4.pth",
+    "v2Pro": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/v2Pro/s2Gv2Pro.pth",
+    "v2ProPlus": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/v2Pro/s2Gv2ProPlus.pth",
 }
 
 pretrained_gpt_name = {
-    "v1": "GPT_SoVITS/pretrained_models/s1bert25hz-2kh-longer-epoch=68e-step=50232.ckpt",
-    "v2": "GPT_SoVITS/pretrained_models/gsv-v2final-pretrained/s1bert25hz-5kh-longer-epoch=12-step=369668.ckpt",
-    "v3": "GPT_SoVITS/pretrained_models/s1v3.ckpt",
-    "v4": "GPT_SoVITS/pretrained_models/s1v3.ckpt",
-    "v2Pro": "GPT_SoVITS/pretrained_models/s1v3.ckpt",
-    "v2ProPlus": "GPT_SoVITS/pretrained_models/s1v3.ckpt",
+    "v1": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/s1bert25hz-2kh-longer-epoch=68e-step=50232.ckpt",
+    "v2": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/gsv-v2final-pretrained/s1bert25hz-5kh-longer-epoch=12-step=369668.ckpt",
+    "v3": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/s1v3.ckpt",
+    "v4": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/s1v3.ckpt",
+    "v2Pro": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/s1v3.ckpt",
+    "v2ProPlus": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/s1v3.ckpt",
 }
 name2sovits_path = {
     # i18n("不训练直接推v1底模！"): "GPT_SoVITS/pretrained_models/s2G488k.pth",
-    i18n("不训练直接推v2底模！"): "GPT_SoVITS/pretrained_models/gsv-v2final-pretrained/s2G2333k.pth",
+    i18n("不训练直接推v2底模！"): "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/gsv-v2final-pretrained/s2G2333k.pth",
     # i18n("不训练直接推v3底模！"): "GPT_SoVITS/pretrained_models/s2Gv3.pth",
     # i18n("不训练直接推v4底模！"): "GPT_SoVITS/pretrained_models/gsv-v4-pretrained/s2Gv4.pth",
-    i18n("不训练直接推v2Pro底模！"): "GPT_SoVITS/pretrained_models/v2Pro/s2Gv2Pro.pth",
-    i18n("不训练直接推v2ProPlus底模！"): "GPT_SoVITS/pretrained_models/v2Pro/s2Gv2ProPlus.pth",
+    i18n("不训练直接推v2Pro底模！"): "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/v2Pro/s2Gv2Pro.pth",
+    i18n("不训练直接推v2ProPlus底模！"): "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/v2Pro/s2Gv2ProPlus.pth",
 }
 name2gpt_path = {
     # i18n("不训练直接推v1底模！"):"GPT_SoVITS/pretrained_models/s1bert25hz-2kh-longer-epoch=68e-step=50232.ckpt",
     i18n(
         "不训练直接推v2底模！"
-    ): "GPT_SoVITS/pretrained_models/gsv-v2final-pretrained/s1bert25hz-5kh-longer-epoch=12-step=369668.ckpt",
-    i18n("不训练直接推v3底模！"): "GPT_SoVITS/pretrained_models/s1v3.ckpt",
+    ): "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/gsv-v2final-pretrained/s1bert25hz-5kh-longer-epoch=12-step=369668.ckpt",
+    i18n("不训练直接推v3底模！"): "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/s1v3.ckpt",
 }
 SoVITS_weight_root = [
     "SoVITS_weights",

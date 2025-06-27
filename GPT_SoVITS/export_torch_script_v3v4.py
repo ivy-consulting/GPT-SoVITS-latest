@@ -533,7 +533,7 @@ def init_hifigan():
     hifigan_model.eval()
     hifigan_model.remove_weight_norm()
     state_dict_g = torch.load(
-        "%s/GPT_SoVITS/pretrained_models/gsv-v4-pretrained/vocoder.pth" % (now_dir,), map_location="cpu"
+        "%s/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/gsv-v4-pretrained/vocoder.pth" % (now_dir,), map_location="cpu"
     )
     print("loading vocoder", hifigan_model.load_state_dict(state_dict_g))
     if is_half == True:
@@ -584,7 +584,7 @@ v3v4set = {"v3", "v4"}
 
 
 def get_sovits_weights(sovits_path):
-    path_sovits_v3 = "GPT_SoVITS/pretrained_models/s2Gv3.pth"
+    path_sovits_v3 = "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/s2Gv3.pth"
     is_exist_s2gv3 = os.path.exists(path_sovits_v3)
 
     version, model_version, if_lora_v3 = get_sovits_version_from_path_fast(sovits_path)
@@ -707,13 +707,13 @@ def export_cfm(
 
 def export_1(ref_wav_path, ref_wav_text, version="v3"):
     if version == "v3":
-        sovits = get_sovits_weights("GPT_SoVITS/pretrained_models/s2Gv3.pth")
+        sovits = get_sovits_weights("/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/s2Gv3.pth")
         init_bigvgan()
     else:
-        sovits = get_sovits_weights("GPT_SoVITS/pretrained_models/gsv-v4-pretrained/s2Gv4.pth")
+        sovits = get_sovits_weights("/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/gsv-v4-pretrained/s2Gv4.pth")
         init_hifigan()
 
-    dict_s1 = torch.load("GPT_SoVITS/pretrained_models/s1v3.ckpt")
+    dict_s1 = torch.load("/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/s1v3.ckpt")
     raw_t2s = get_raw_t2s_model(dict_s1).to(device)
     print("#### get_raw_t2s_model ####")
     print(raw_t2s.config)
@@ -1142,7 +1142,7 @@ def export_2(version="v3"):
 
     logger.info("cfm ok")
 
-    dict_s1 = torch.load("GPT_SoVITS/pretrained_models/s1v3.ckpt")
+    dict_s1 = torch.load("/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/s1v3.ckpt")
     # v2 的 gpt 也可以用
     # dict_s1 = torch.load("GPT_SoVITS/pretrained_models/gsv-v2final-pretrained/s1bert25hz-5kh-longer-epoch=12-step=369668.ckpt")
     raw_t2s = get_raw_t2s_model(dict_s1).to(device)
