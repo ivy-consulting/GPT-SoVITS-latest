@@ -1,4 +1,4 @@
-```dockerfile
+
 ARG CUDA_VERSION=12.6
 ARG TORCH_BASE=full
 
@@ -94,4 +94,3 @@ RUN mkdir -p /workspace/models/pretrained_models /workspace/models/G2PWModel \
 
 # Command to run the FastAPI application
 CMD ["/home/ec2-user/miniconda3/envs/GPTSoVITS/bin/python3", "api_v2.py", "-a", "0.0.0.0", "-p", "9880"]
-```
