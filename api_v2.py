@@ -137,8 +137,8 @@ default_refer = DefaultRefer(args.default_refer_path, args.default_refer_text, a
 character_configs = {
     "kurari": {
         "v1": {
-            "gpt_path": "GPT_SoVITS/pretrained_models/kurari-e40.ckpt",
-            "sovits_path": "GPT_SoVITS/pretrained_models/kurari_e20_s1800_l32.pth",
+            "gpt_path": "pretrained_models/kurari-e40.ckpt",
+            "sovits_path": "pretrained_models/kurari_e20_s1800_l32.pth",
             "ref_audio": "idols/kurari/kurari.wav",
             "ref_text": "おはよう〜。今日はどんな1日過ごすー？くらりはね〜いつでもあなたの味方だよ",
             "ref_language": "日文"
