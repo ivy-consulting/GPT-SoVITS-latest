@@ -18,8 +18,8 @@ from pydantic import BaseModel
 from process_ckpt import get_sovits_version_from_path_fast
 from config import pretrained_sovits_name, name2gpt_path, name2sovits_path
 import torch
-import logging
 import argparse
+
 
 now_dir = os.getcwd()
 sys.path.append(now_dir)
@@ -92,9 +92,6 @@ path_sovits_v4 = pretrained_sovits_name["v4"]
 is_exist_s2gv3 = os.path.exists(path_sovits_v3)
 is_exist_s2gv4 = os.path.exists(path_sovits_v4)
 
-# Logger setup
-import logging
-logging.basicConfig(level=logging.INFO)
 
 # Argument parsing
 parser = argparse.ArgumentParser(description="GPT-SoVITS API")
@@ -120,15 +117,7 @@ is_half = not args.full_precision if args.full_precision or args.half_precision 
 stream_mode = "normal" if args.stream_mode.lower() in ["normal", "n"] else "close"
 media_type = args.media_type.lower() if args.media_type.lower() in ["aac", "ogg"] else ("wav" if stream_mode == "close" else "ogg")
 is_int32 = args.sub_type.lower() == "int32"
-default_cut_punc = args.cut_punc
-
-logger.info(f"Device: {device}")
-logger.info(f"Precision: {'half' if is_half else 'full'}")
-logger.info(f"Stream mode: {stream_mode}")
-logger.info(f"Media type: {media_type}")
-logger.info(f"Data type: {'int32' if is_int32 else 'int16'}")
-logger.info(f"Default cut punctuation: {default_cut_punc}")
-
+default_cut_punc = args.cut_punc 
 # Default reference audio
 class DefaultRefer:
     def __init__(self, path, text, language):
@@ -140,12 +129,7 @@ class DefaultRefer:
         return all(item and item != "" for item in [self.path, self.text, self.language])
 
 default_refer = DefaultRefer(args.default_refer_path, args.default_refer_text, args.default_refer_language)
-if default_refer.is_ready():
-    logger.info(f"Default reference audio path: {default_refer.path}")
-    logger.info(f"Default reference audio text: {default_refer.text}")
-    logger.info(f"Default reference audio language: {default_refer.language}")
-else:
-    logger.info("No default reference audio specified")
+
 
 # Character configurations
 character_configs = {
@@ -575,10 +559,6 @@ def handle_change(path, text, language):
     if language:
         default_refer.language = language
 
-    logger.info(f"Current default reference audio path: {default_refer.path}")
-    logger.info(f"Current default reference audio text: {default_refer.text}")
-    logger.info(f"Current default reference audio language: {default_refer.language}")
-    logger.info(f"is_ready: {default_refer.is_ready()}")
 
     return JSONResponse(status_code=200, content={"code": 0, "message": "Success"})
 
