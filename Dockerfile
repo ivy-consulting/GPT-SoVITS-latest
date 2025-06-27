@@ -62,4 +62,4 @@ RUN rm -rf /workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models && \
     ln -s /workspace/models/uvr5_weights /workspace/GPT-SoVITS/tools/uvr5/uvr5_weights
 
 # Set the entrypoint to run app_v2.py with Uvicorn
-CMD ["/bin/bash", "-c", "source /root/.bashrc && conda init bash && conda activate base && uvicorn app_v2:app --host 0.0.0.0 --port 9880"]
+CMD ["/bin/bash", "-c", "source /root/miniconda3/etc/profile.d/conda.sh && conda activate base && uvicorn app_v2:app --host 0.0.0.0 --port 9880"]
