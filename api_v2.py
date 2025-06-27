@@ -497,9 +497,7 @@ async def tts_handle(req: dict):
             normalize=req.get("normalize", False),
             energy_scale=req.get("energy_scale", 1.0),
             volume_scale=req.get("volume_scale", 1.0),
-            strain_effect=req.get("strain_effect", 0.0),
-            is_int32=is_int32,  # Add is_int32
-
+            strain_effect=req.get("strain_effect", 0.0)
         )
 
         if stream_mode == "normal":
