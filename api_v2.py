@@ -20,6 +20,7 @@ from process_ckpt import get_sovits_version_from_path_fast
 from config import pretrained_sovits_name, name2gpt_path, name2sovits_path
 import torch
 import argparse
+import re
 
 
 now_dir = os.getcwd()
