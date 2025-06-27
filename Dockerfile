@@ -17,9 +17,9 @@ ENV PIP_NO_CACHE_DIR=1
 
 SHELL ["/bin/bash", "-c"]
 
-WORKDIR /workspace/GPT-SoVITS
+WORKDIR /workspace/GPT-SoVITS-latest
 
-COPY Docker /workspace/GPT-SoVITS/Docker/
+COPY Docker /workspace/GPT-SoVITS-latest/Docker/
 
 ARG LITE=false
 ENV LITE=${LITE}
@@ -41,7 +41,7 @@ RUN . /home/ec2-user/miniconda3/etc/profile.d/conda.sh && \
     pip install ipykernel uvicorn fastapi && \
     bash install_wrapper.sh
 
-COPY . /workspace/GPT-SoVITS
+COPY . /workspace/GPT-SoVITS-latest
 
 # Create model directories in case /workspace/models is not mounted
 RUN mkdir -p /workspace/models/pretrained_models /workspace/models/G2PWModel \
