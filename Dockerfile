@@ -1,65 +1,62 @@
-# Use a base image with CUDA 12.6
-FROM nvidia/cuda:12.6.0-runtime-ubuntu20.04
+ARG CUDA_VERSION=12.6
+ARG TORCH_BASE=full
+
+FROM xxxxrt666/torch-base:cu${CUDA_VERSION}-${TORCH_BASE}
 
 LABEL maintainer="XXXXRT"
 LABEL version="V4"
-LABEL description="Docker image for GPT-SoVITS with FastAPI"
+LABEL description="Docker image for GPT-SoVITS"
 
 ARG CUDA_VERSION=12.6
+
 ENV CUDA_VERSION=${CUDA_VERSION}
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Etc/UTC
-ENV PYTHONUNBUFFERED=1
-ENV PIP_NO_CACHE_DIR=1
-ENV PYTHONPATH="/workspace/GPT-SoVITS-latest"
 
-# Install system dependencies and Miniconda
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3.9 \
-    python3-pip \
-    python3-dev \
-    wget \
-    unzip \
-    ffmpeg \
-    libsox-dev \
-    libsndfile1 \
-    build-essential \
-    cmake \
-    git \
-    git-lfs \
-    && git lfs install \
-    && rm -rf /var/lib/apt/lists/* && \
-    wget -q https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
-    bash /tmp/miniconda.sh -b -p /home/ec2-user/miniconda3 && \
-    rm /tmp/miniconda.sh && \
-    /home/ec2-user/miniconda3/bin/conda init bash && \
-    echo "conda activate base" >> /root/.bashrc
+SHELL ["/bin/bash", "-c"]
 
-# Set working directory
-WORKDIR /workspace/GPT-SoVITS-latest
+WORKDIR /workspace/GPT-SoVITS
 
-# Copy requirements and install scripts
-COPY requirements.txt extra-req.txt install.sh install_wrapper.sh /workspace/GPT-SoVITS-latest/
+COPY Docker /workspace/GPT-SoVITS/Docker/
 
-# Create Conda environment and run install_wrapper.sh
-RUN . /home/ec2-user/miniconda3/etc/profile.d/conda.sh && \
-    conda create -n GPTSoVITS python=3.9 -y && \
-    conda activate GPTSoVITS && \
-    pip install --upgrade pip && \
-    pip install ipykernel uvicorn fastapi && \
-    bash install_wrapper.sh && \
-    pip cache purge && \
-    rm -rf /tmp/* /var/tmp/* /home/ec2-user/miniconda3/pkgs /root/.conda /root/.cache
+ARG LITE=false
+ENV LITE=${LITE}
 
-# Copy the GPT-SoVITS application
-COPY . /workspace/GPT-SoVITS-latest
+ARG WORKFLOW=false
+ENV WORKFLOW=${WORKFLOW}
 
-# Create model directories (in case /workspace/models is not mounted)
-RUN mkdir -p /workspace/models/pretrained_models /workspace/models/G2PWModel \
-    /workspace/models/asr_models /workspace/models/uvr5_weights
+ARG TARGETPLATFORM
+ENV TARGETPLATFORM=${TARGETPLATFORM}
 
-# Expose the FastAPI port
-EXPOSE 9880
+RUN bash Docker/miniconda_install.sh
 
-# Command to run the FastAPI application
-CMD ["/home/ec2-user/miniconda3/envs/GPTSoVITS/bin/python3", "api_v2.py", "-a", "0.0.0.0", "-p", "9880"]
+COPY extra-req.txt /workspace/GPT-SoVITS/
+
+COPY requirements.txt /workspace/GPT-SoVITS/
+
+COPY install.sh /workspace/GPT-SoVITS/
+
+RUN bash Docker/install_wrapper.sh
+
+EXPOSE 9871 9872 9873 9874 9880
+
+ENV PYTHONPATH="/workspace/GPT-SoVITS"
+
+RUN conda init bash && echo "conda activate base" >> ~/.bashrc
+
+WORKDIR /workspace
+
+RUN rm -rf /workspace/GPT-SoVITS
+
+WORKDIR /workspace/GPT-SoVITS
+
+COPY . /workspace/GPT-SoVITS
+
+CMD ["/bin/bash", "-c", "\
+  rm -rf /workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models && \
+  rm -rf /workspace/GPT-SoVITS/GPT_SoVITS/text/G2PWModel && \
+  rm -rf /workspace/GPT-SoVITS/tools/asr/models && \
+  rm -rf /workspace/GPT-SoVITS/tools/uvr5/uvr5_weights && \
+  ln -s /workspace/models/pretrained_models /workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models && \
+  ln -s /workspace/models/G2PWModel /workspace/GPT-SoVITS/GPT_SoVITS/text/G2PWModel && \
+  ln -s /workspace/models/asr_models /workspace/GPT-SoVITS/tools/asr/models && \
+  ln -s /workspace/models/uvr5_weights /workspace/GPT-SoVITS/tools/uvr5/uvr5_weights && \
+  exec bash"]
