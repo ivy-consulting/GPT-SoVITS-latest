@@ -394,28 +394,28 @@ def get_tts_wav(
         raise ValueError(i18n("V3不支持无参考文本模式，请填写参考文本！"))
 
 def check_params(req: dict):
-    text: str = req.get("text", "")
-    text_language: str = req.get("text_language", "")
-    refer_wav_path: str = req.get("refer_wav_path", "")
-    prompt_text: str = req.get("prompt_text", "")
-    prompt_language: str = req.get("prompt_language", "")
-    cut_punc: str = req.get("cut_punc", None)
+    text: str = req.get("text") or "default text"  # Fallback if None or empty
+    text_language: str = req.get("text_language") or "auto"
+    refer_wav_path: str = req.get("refer_wav_path") or default_refer.path
+    prompt_text: str = req.get("prompt_text") or default_refer.text
+    prompt_language: str = req.get("prompt_language") or default_refer.language
+    cut_punc: str = req.get("cut_punc") or default_cut_punc
     sample_steps: int = req.get("sample_steps", 32)
     super_sampling: bool = req.get("super_sampling", False)
     character: str = req.get("character", "kurari").lower()
     version: str = req.get("version", "v1")
-    
-    if text in [None, ""]:
-        return JSONResponse(status_code=400, content={"message": "text is required"})
-    if text_language in [None, ""]:
-        return JSONResponse(status_code=400, content={"message": "text_language is required"})
+
+    if not text:
+        return JSONResponse(status_code=400, content={"message": "text cannot be empty"})
+    if not text_language:
+        return JSONResponse(status_code=400, content={"message": "text_language cannot be empty"})
     if text_language not in dict_language:
         return JSONResponse(status_code=400, content={"message": f"text_language: {text_language} is not supported"})
-    if refer_wav_path in [None, ""] and not default_refer.is_ready():
+    if not refer_wav_path and not default_refer.is_ready():
         return JSONResponse(status_code=400, content={"message": "refer_wav_path is required when default reference is not set"})
-    if prompt_text in [None, ""] and not default_refer.is_ready():
+    if not prompt_text and not default_refer.is_ready():
         return JSONResponse(status_code=400, content={"message": "prompt_text is required when default reference is not set"})
-    if prompt_language in [None, ""] and not default_refer.is_ready():
+    if not prompt_language and not default_refer.is_ready():
         return JSONResponse(status_code=400, content={"message": "prompt_language is required when default reference is not set"})
     if prompt_language not in dict_language:
         return JSONResponse(status_code=400, content={"message": f"prompt_language: {prompt_language} is not supported"})
@@ -425,7 +425,7 @@ def check_params(req: dict):
         return JSONResponse(status_code=400, content={"message": f"character: {character} is not supported"})
     if version not in character_configs[character]:
         return JSONResponse(status_code=400, content={"message": f"version: {version} is not supported for character {character}"})
-    
+
     # Validate super_sampling for v3
     gpt_weights = character_configs[character][version]["gpt_path"]
     sovits_weights = character_configs[character][version]["sovits_path"]
