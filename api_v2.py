@@ -146,7 +146,7 @@ character_configs = {
         "v2": {
             "gpt_path": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/kurari-hql-e40.ckpt",
             "sovits_path": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/kurari-hql_e20_s1240.pth",
-            "ref_audio": "idols/kurari/kurari.wav",
+            "ref_audio": "/workspace/GPT-SoVITS/idols/kurari/kurari.wav",
             "ref_text": "おはよう〜。今日はどんな1日過ごすー？くらりはね〜いつでもあなたの味方だよ",
             "ref_language": "日文"
         },
@@ -171,7 +171,7 @@ character_configs = {
         "v1": {
             "gpt_path": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/baacharu-e40.ckpt",
             "sovits_path": "/workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models/baacharu_e15_s1320_l32.pth",
-            "ref_audio": "idols/baacharu/baacharu.wav",
+            "ref_audio": "/workspace/GPT-SoVITS/idols/baacharu/baacharu.wav",
             "ref_text": "どーもー、世界初男性バーチャルユーチューバーのばあちゃるです",
             "ref_language": "日文"
         }
