@@ -11,7 +11,7 @@ services:
       - "9874:9874"
       - "9880:9880"
     volumes:
-      - .:/workspace/GPT-SoVITS-latest
+      - .:/workspace/GPT-SoVITS
     environment:
       - is_half=true
     tty: true
