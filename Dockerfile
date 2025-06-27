@@ -51,7 +51,7 @@ WORKDIR /workspace/GPT-SoVITS
 COPY . /workspace/GPT-SoVITS
 
 # COPY pretrained_models directly into the target folder
-COPY GPT_SoVITS/pretrained_models /workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models
+COPY GPT_SoVITS/pretrained_models/* /workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models
 
 # Set up model directories with symbolic links
 RUN rm -rf /workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models && \
@@ -63,4 +63,4 @@ RUN rm -rf /workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models && \
     ln -s /workspace/models/asr_models /workspace/GPT-SoVITS/tools/asr/models && \
     ln -s /workspace/models/uvr5_weights /workspace/GPT-SoVITS/tools/uvr5/uvr5_weights
 
-CMD ["/bin/bash", "-c", "source /root/miniconda3/etc/profile.d/conda.sh && conda activate base && export PYTHONPATH=/workspace/GPT-SoVITS:/workspace/GPT-SoVITS/GPT_SoVITS:/workspace/GPT-SoVITS/GPT_SoVITS/eres2net:$PYTHONPATH && python /workspace/GPT-SoVITSapi_v2.py"]
+CMD ["/bin/bash", "-c", "source /root/miniconda3/etc/profile.d/conda.sh && conda activate base && export PYTHONPATH=/workspace/GPT-SoVITS:/workspace/GPT-SoVITS/GPT_SoVITS:/workspace/GPT-SoVITS/GPT_SoVITS/eres2net:$PYTHONPATH && python /workspace/GPT-SoVITS/api_v2.py"]
