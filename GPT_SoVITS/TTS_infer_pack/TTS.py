@@ -21,6 +21,8 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import yaml
+import sys
+sys.path.append('/workspace/GPT-SoVITS/GPT_SoVITS')
 from AR.models.t2s_lightning_module import Text2SemanticLightningModule
 from BigVGAN.bigvgan import BigVGAN
 from feature_extractor.cnhubert import CNHubert
