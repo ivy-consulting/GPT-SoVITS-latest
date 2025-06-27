@@ -33,12 +33,12 @@ COPY install.sh /workspace/GPT-SoVITS/
 
 RUN bash Docker/install_wrapper.sh
 
-# Install Uvicorn for running FastAPI
+# Install Uvicorn (still needed for api_v2.py's internal uvicorn.run())
 RUN pip install uvicorn
 
 EXPOSE 9871 9872 9873 9874 9880
 
-ENV PYTHONPATH="/workspace/GPT-SoVITS:/workspace/GPT-SoVITS/GPT_SoVITS"
+ENV PYTHONPATH="/workspace/GPT-SoVITS:/workspace/GPT-SoVITS/GPT_SoVITS:/workspace/GPT-SoVITS/GPT_SoVITS/eres2net"
 
 RUN conda init bash && echo "conda activate base" >> ~/.bashrc
 
@@ -60,4 +60,4 @@ RUN rm -rf /workspace/GPT-SoVITS/GPT_SoVITS/pretrained_models && \
     ln -s /workspace/models/asr_models /workspace/GPT-SoVITS/tools/asr/models && \
     ln -s /workspace/models/uvr5_weights /workspace/GPT-SoVITS/tools/uvr5/uvr5_weights
 
-CMD ["/bin/bash", "-c", "source /root/miniconda3/etc/profile.d/conda.sh && conda activate base && export PYTHONPATH=/workspace/GPT-SoVITS:/workspace/GPT-SoVITS/GPT_SoVITS:$PYTHONPATH && uvicorn api_v2:app --host 0.0.0.0 --port 9880"]
+CMD ["/bin/bash", "-c", "source /root/miniconda3/etc/profile.d/conda.sh && conda activate base && export PYTHONPATH=/workspace/GPT-SoVITS:/workspace/GPT-SoVITS/GPT_SoVITS:/workspace/GPT-SoVITS/GPT_SoVITS/eres2net:$PYTHONPATH && python api_v2.py"]
